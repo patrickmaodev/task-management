@@ -22,6 +22,10 @@ export const Login: React.FC = () => {
     } catch (err: any) {
       if (err.response?.status === 422) {
         setError(err.response.data.message || 'Invalid credentials');
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (!err.response) {
+        setError('Unable to reach the server. Check that the API is running.');
       } else {
         setError('Something went wrong. Please try again.');
       }
@@ -31,18 +35,18 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-screen">
-      <div className="glass-panel p-8 w-full max-w-md animate-fade-in">
-        <div className="flex flex-col items-center mb-6">
-          <div className="bg-blue-500/10 p-3 rounded-full mb-4">
-            <LogIn size={32} className="text-blue-500" color="#3b82f6" />
+    <div className="flex min-h-screen w-full items-center justify-center p-6">
+      <div className="glass-panel w-full max-w-md p-8 animate-fade-in">
+        <div className="mb-6 flex flex-col items-center">
+          <div className="mb-4 rounded-full bg-blue-500/10 p-3">
+            <LogIn size={32} className="text-blue-500" />
           </div>
           <h2>Welcome Back</h2>
           <p>Sign in to manage your tasks</p>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-3 rounded-md mb-6 text-sm">
+          <div className="mb-6 rounded-md border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
             {error}
           </div>
         )}
@@ -72,18 +76,20 @@ export const Login: React.FC = () => {
             />
           </div>
 
-          <button 
-            type="submit" 
-            className="btn btn-primary w-full mt-4 flex items-center justify-center gap-2"
+          <button
+            type="submit"
+            className="btn btn-primary mt-4 flex w-full items-center justify-center gap-2 py-3"
             disabled={isLoading}
-            style={{ width: '100%', padding: '0.75rem' }}
           >
-            {isLoading ? <div className="loader" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div> : 'Sign In'}
+            {isLoading ? <div className="loader size-4 border-2" /> : 'Sign In'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm">
-          Don't have an account? <Link to="/register" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>Sign up</Link>
+          Don't have an account?{' '}
+          <Link to="/register" className="text-blue-500 no-underline hover:underline">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>

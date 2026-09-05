@@ -29,6 +29,10 @@ export const Register: React.FC = () => {
     } catch (err: any) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors || {});
+      } else if (err.response?.data?.message) {
+        setErrors({ general: [err.response.data.message] });
+      } else if (!err.response) {
+        setErrors({ general: ['Unable to reach the server. Check that the API is running.'] });
       } else {
         setErrors({ general: ['Something went wrong. Please try again.'] });
       }
@@ -38,18 +42,18 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-screen">
-      <div className="glass-panel p-8 w-full max-w-md animate-fade-in">
-        <div className="flex flex-col items-center mb-6">
-          <div className="bg-emerald-500/10 p-3 rounded-full mb-4">
-            <UserPlus size={32} className="text-emerald-500" color="#10b981" />
+    <div className="flex min-h-screen w-full items-center justify-center p-6">
+      <div className="glass-panel w-full max-w-md p-8 animate-fade-in">
+        <div className="mb-6 flex flex-col items-center">
+          <div className="mb-4 rounded-full bg-emerald-500/10 p-3">
+            <UserPlus size={32} className="text-emerald-500" />
           </div>
           <h2>Create Account</h2>
           <p>Join us to start managing your tasks</p>
         </div>
 
         {errors.general && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-3 rounded-md mb-6 text-sm">
+          <div className="mb-6 rounded-md border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
             {errors.general[0]}
           </div>
         )}
@@ -106,18 +110,20 @@ export const Register: React.FC = () => {
             />
           </div>
 
-          <button 
-            type="submit" 
-            className="btn btn-primary w-full mt-4 flex items-center justify-center gap-2"
+          <button
+            type="submit"
+            className="btn mt-4 flex w-full items-center justify-center gap-2 bg-emerald-500 py-3 hover:bg-emerald-600"
             disabled={isLoading}
-            style={{ width: '100%', padding: '0.75rem', backgroundColor: '#10b981' }}
           >
-            {isLoading ? <div className="loader" style={{ width: '16px', height: '16px', borderWidth: '2px', borderTopColor: '#fff' }}></div> : 'Sign Up'}
+            {isLoading ? <div className="loader size-4 border-2 border-t-white" /> : 'Sign Up'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm">
-          Already have an account? <Link to="/login" style={{ color: '#10b981', textDecoration: 'none' }}>Sign in</Link>
+          Already have an account?{' '}
+          <Link to="/login" className="text-emerald-500 no-underline hover:underline">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>
